@@ -1,0 +1,27 @@
+.ant-divider-horizontal.ant-divider-with-text {
+    margin: 0px !important;
+}
+
+/* .ant-list-item-meta-description {
+    line-height: 0.5715 !important;
+} */
+
+.tracking-log-detail{
+    list-style: none;
+     padding: 0px;
+     color: #282828 !important;
+     margin: 0px !important;
+}
+
+.ng-star-inserted p{
+    margin: 0px !important;
+}
+
+.ant-divider-horizontal.ant-divider-with-text {
+    color: #f39c12 !important;
+}
+
+.font-sm {
+    font-size: 11px;
+    color: #999;
+}

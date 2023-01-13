@@ -1,0 +1,155 @@
+<div class="card">
+    <nz-page-header class="site-page-header">
+        <nz-page-header-title>Hóa đơn</nz-page-header-title>
+
+        <nz-page-header-extra>
+            <button nz-button nzType="primary" (click)="backToList()">Trở về</button>
+            <button *ngIf="!isReadOnly" nz-button nzType="primary" (click)="save()">Lưu</button>
+            <button *ngIf="isReadOnly" nz-button nzType="primary" (click)="edit()">Sửa</button>
+        </nz-page-header-extra>
+
+        <nz-page-header-content>
+            <div nz-row>
+                <div nz-col class="gutter-row content-panel" nzXXl="16" nzXl="16" nzLg="16" nzMd="16" [nzSpan]="24">
+                    <nz-tabset>
+                        <nz-tab nzTitle="Chi tiết hóa đơn">
+                            <div class="col-lg-12">
+                                <app-invoice-detail #invoiceDetailComponent [invoiceId]="model.id"
+                                    [isCustomContent]="true" (onChange)="invoiceDetailOnChange($event)">
+                                </app-invoice-detail>
+                            </div>
+                        </nz-tab>
+                    </nz-tabset>
+
+                </div>
+                <div nz-col class="gutter-row log-panel" nzXXl="8" nzXl="8" nzLg="8" nzMd="8" [nzSpan]="24">
+                    <nz-tabset>
+                        <nz-tab nzTitle="Thông tin hóa đơn">
+                            <form nz-form [formGroup]="formGroup" (ngSubmit)="save()" nzLayout="horizontal">
+                                <div class="col-lg-12">
+                                    <div class="row" *ngIf="formGroup.value?.id > 0">
+                                        <div class="col-lg-12">
+                                            <div class="text-right">
+                                                <p class="hlsoft-input">({{ formGroup.value?.code }}) <label
+                                                        class="hlsoft-active">{{ formGroup.value?.name }}</label> </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Ngày hóa đơn <span class="label-required">(*)</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <nz-form-item>
+                                                <nz-form-control [nzErrorTip]="invoiceDateErrorTpl">
+                                                    <nz-date-picker class="text-right" formControlName="invoiceDate"
+                                                        style="width: 100%; text-align: right;">
+                                                    </nz-date-picker>
+                                                    <ng-template #invoiceDateErrorTpl let-control>
+                                                        <app-validation-messages [formCtrl]="control">
+                                                        </app-validation-messages>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Loại hóa đơn <span class="label-required">(*)</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <nz-form-item>
+                                                <nz-form-control [nzErrorTip]="codeDetailIdErrorTpl">
+                                                    <app-code-detail-combobox class="text-right" formControlName="codeDetailId"
+                                                        [selectedItems]="[{ value: formGroup.value?.codeDetailId, displayText: formGroup.value?.codeDetailName }]"
+                                                        (onItemSelected)="codeDetailItemSelected($event)">
+                                                    </app-code-detail-combobox>
+                                                    <ng-template #codeDetailIdErrorTpl let-control>
+                                                        <app-validation-messages [formCtrl]="control">
+                                                        </app-validation-messages>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Tài khoản chi <span class="label-required">(*)</span></label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <nz-form-item>
+                                                <nz-form-control [nzErrorTip]="sourceBankAccountIdErrorTpl">
+                                                    <app-bank-account-combobox class="text-right" formControlName="sourceBankAccountId"
+                                                        [selectedItems]="[{ value: formGroup.value?.sourceBankAccountId, displayText: formGroup.value?.sourceBankAccountName }]"
+                                                        (onItemSelected)="sourceBankAccountItemSelected($event)">
+                                                    </app-bank-account-combobox>
+                                                    <ng-template #sourceBankAccountIdErrorTpl let-control>
+                                                        <app-validation-messages [formCtrl]="control">
+                                                        </app-validation-messages>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Tài khoản nhận</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <nz-form-item>
+                                                <nz-form-control [nzErrorTip]="destinationBankAccountIdErrorTpl">
+                                                    <app-bank-account-combobox class="text-right" formControlName="destinationBankAccountId"
+                                                        [selectedItems]="[{ value: formGroup.value?.destinationBankAccountId, displayText: formGroup.value?.destinationBankAccountName }]"
+                                                        (onItemSelected)="destinationBankAccountItemSelected($event)">
+                                                    </app-bank-account-combobox>
+                                                    <ng-template #destinationBankAccountIdErrorTpl let-control>
+                                                        <app-validation-messages [formCtrl]="control">
+                                                        </app-validation-messages>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Tổng tiền</label>
+                                        </div>
+                                        <div class="col-lg-8 text-right">
+                                            <label class="hlsoft-highlight">{{ formGroup.value?.totalAmount |
+                                                formatNumber: '2'
+                                                }} đ</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Ghi chú</label>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <nz-form-item>
+                                                <nz-form-control>
+                                                    <textarea type="text" nz-input class="hlsoft-input text-right"
+                                                        autoFocus formControlName="note" [readOnly]="isReadOnly"
+                                                        rows="3"></textarea>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </nz-tab>
+                        <nz-tab nzTitle="Lịch sử thay đổi">
+                            <app-tracking-log #trackingLogComponent [referenceId]="model.id" [moduleType]="moduleType">
+                            </app-tracking-log>
+                        </nz-tab>
+                    </nz-tabset>
+                </div>
+            </div>
+        </nz-page-header-content>
+    </nz-page-header>
+</div>

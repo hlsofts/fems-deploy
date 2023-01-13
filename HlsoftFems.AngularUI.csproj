@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>angular</AssemblyName>
+    <PackageId>angular</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="node_modules\**" />
+    <EmbeddedResource Remove="node_modules\**" />
+    <None Remove="node_modules\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="dist" />
+    <None Include="app.config" />
+    <None Update="wwwroot\**\*;web.config">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\app\accountant\invoice\components\" />
+    <Folder Include="src\app\accountant\invoice\models\dtos\" />
+    <Folder Include="src\app\accountant\invoice\services\" />
+    <Folder Include="src\app\base\controls\tracking-log\models\filters\" />
+    <Folder Include="src\app\base\controls\tracking-log\models\view-models\" />
+    <Folder Include="src\app\base\controls\tracking-log\models\enums\" />
+    <Folder Include="src\app\base\models\enums\" />
+    <Folder Include="src\app\base\crud\" />
+    <Folder Include="src\app\base\models\filters\" />
+    <Folder Include="src\app\shared\components\base\" />
+    <Folder Include="src\app\shared\models\dtos\" />
+    <Folder Include="src\app\shared\models\filters\" />
+    <Folder Include="src\app\shared\models\view-models\" />
+    <Folder Include="src\app\shared\modules\" />
+    <Folder Include="src\app\shared\layouts\" />
+    <Folder Include="src\app\shared\configs\" />
+    <Folder Include="src\app\shared\services\" />
+    <Folder Include="src\shared\modules\" />
+  </ItemGroup>
+</Project>

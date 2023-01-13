@@ -1,0 +1,16 @@
+<nz-select nzAllowClear
+           nzShowSearch
+           nzPlaceHolder="Chọn loại chi phí"
+           [ngStyle]="{'width': '100%'}"
+           [nzServerSearch]="true"
+           [nzDropdownMatchSelectWidth]="false"
+           [nzAutoClearSearchValue]="true"
+           [(ngModel)]="_value"
+           (ngModelChange)="changeValue($event)"
+           (nzFocus)="focus($event)"
+           (nzOnSearch)="search($event)">
+    <nz-option *ngFor="let option of options$ | async"
+               [nzLabel]="option.displayText"
+               [nzValue]="option.value">
+    </nz-option>
+</nz-select>

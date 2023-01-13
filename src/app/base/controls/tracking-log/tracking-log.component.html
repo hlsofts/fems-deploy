@@ -1,0 +1,74 @@
+<div class="box-message">
+    <ng-container *ngIf="dataSource?.length > 0; else trackingLogEmptyTpl;">
+        <!--<div class="d-flex justify-content-end">
+            <nav aria-label="Pager" class="kt_cp_pager" role="search">
+                <div class="">
+                    <span class="kt_pager_counter">
+                        <span class="kt_pager_value">{{fromRow}} - {{toRow}}</span> / <span class="kt_pager_limit">{{totalCount}}</span>
+                    </span>
+                    <span aria-atomic="true" class="btn-group">
+                        <button keyshortcuts aria-label="Previous"
+                                class="btn btn-secondary kt_pager_previous"
+                                title="Trước đó"
+                                type="button">
+                            <i class="fa fa-chevron-left "></i>
+                        </button>
+                        <button keyshortcuts aria-label="Next"
+                                class="btn btn-secondary kt_pager_next" title="Kế tiếp"
+                                type="button">
+                            <i class="fa fa-chevron-right "></i>
+                        </button>
+                    </span>
+                </div>
+            </nav>
+        </div>-->
+        <div *ngFor="let itemRoot of dataSource; trackBy: trackByIndex">
+            <nz-divider [nzText]="titleDivider">
+                <ng-template #titleDivider>
+                    {{ getFormatVietnamDate(itemRoot?.key) }}
+                </ng-template>
+            </nz-divider>
+
+            <nz-list nzItemLayout="horizontal">
+                <nz-list-item *ngFor="let subItem of itemRoot.items; trackBy: trackByIndex">
+                    <nz-list-item-meta [nzAvatar]="avatar">
+                        <ng-template #avatar>
+                            <nz-avatar [nzSize]="'small'" style="background-color: #f39c12" nzIcon="user"></nz-avatar>
+                        </ng-template>
+                        <nz-list-item-meta-title>
+                            <b href="javascript://">{{ subItem?.creatorUserName}} </b>
+                            <i class="font-sm"> - {{subItem?.creationTime | momentFormat: 'DD/MM/YYYY HH:mm:ss'}}</i>
+                        </nz-list-item-meta-title>
+                        <nz-list-item-meta-description>
+                            <ul class="tracking-log-detail">
+                                <ng-container *ngFor="let value of subItem.listValue; trackBy: trackByIndex">
+                                    <li>
+                                        <p>
+                                            {{ value?.FieldName }}:
+                                            <ng-container *ngIf="value.OldValue || value.OldValue === '0'">
+                                                <app-tracking-log-detail [value]="value.OldValue"
+                                                    [dataType]="value.DataType">
+                                                </app-tracking-log-detail>
+                                                <span>
+                                                    &nbsp;
+                                                    <i class="fa fa-arrow-right" aria-hidden="true">
+                                                    </i>&nbsp;
+                                                </span>
+                                            </ng-container>
+                                            <app-tracking-log-detail [value]="value.NewValue"
+                                                [dataType]="value.DataType">
+                                            </app-tracking-log-detail>
+                                        </p>
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </nz-list-item-meta-description>
+                    </nz-list-item-meta>
+                </nz-list-item>
+            </nz-list>
+        </div>
+    </ng-container>
+    <ng-template #trackingLogEmptyTpl>
+        <nz-empty nzNotFoundImage="simple"></nz-empty>
+    </ng-template>
+</div>

@@ -1,0 +1,114 @@
+<div nz-row [nzGutter]="24">
+    <div nz-col class="gutter-row" [nzSpan]="24">
+        <nz-table #editRowTable nzShowSizeChanger [nzFrontPagination]="isFrontPagination"
+            [nzShowPagination]="isShowPagination" [nzLoading]="tableLoading" [nzPageSize]="pageSize"
+            [nzPageIndex]="pageIndex" [nzTotal]="totalItems" [nzData]="datasource"
+            (nzCurrentPageDataChange)="onCurrentPageDataChange($event)" (nzPageSizeChange)="onPageSizeChange($event)"
+            (nzQueryParams)="onQueryParamsChange($event)">
+            <thead>
+                <tr>
+                    <th *ngIf="isShowCheckedBox" [nzWidth]="'40px'" [(nzChecked)]="checked"
+                        [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+                    <th [nzWidth]="'100px'" *ngIf="isShowActionColumn">Thao tác</th>
+                    <ng-container *ngFor="let col of tableColumns; trackBy: trackByIndex">
+                        <ng-container *ngIf="col.isShow !== false">
+                            <th *ngIf="col.isSort" [nzSortFn]="col.isSort" [nzSortPriority]="col.sortPriority"
+                                [nzWidth]="col.isSetWidthAbsolute ? col.width : '100%'" [nzAlign]="'center'"
+                                [nzColumnKey]="col.field" [ngStyle]="{'min-width': col.width}">
+                                {{col.header}}
+                            </th>
+
+                            <th *ngIf="!col.isSort" [nzWidth]="col.isSetWidthAbsolute ? col.width : '100%'"
+                                [nzAlign]="'center'" [nzColumnKey]="col.field" [ngStyle]="{'min-width': col.width}">
+                                {{col.header}}
+                            </th>
+                        </ng-container>
+                    </ng-container>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let data of editRowTable.data; let index = index; trackBy: trackByIndex">
+                    <tr *ngIf="!isCustomContent === false;else editTemplate;">
+                        <td *ngIf="isShowCheckedBox" class="text-center"
+                            [nzChecked]="data.id > 0 ? setOfCheckedId.has(data.id) : setOfCheckedId.has(index)"
+                            [nzDisabled]="data.disabled" (nzCheckedChange)="onItemChecked(data.id, $event)">
+                        </td>
+
+                        <td *ngIf="isShowActionColumn">
+                            <div class="table-operation">
+                                <ng-container *ngFor="let action of tableActions; trackBy: trackByIndex">
+                                    <button *ngIf="action.type === 'single'" nz-button class="actionButton"
+                                        [nzDanger]="action.buttonType === 'danger' ? true : false"
+                                        [nzType]="action.buttonType" title="{{ action.name }}"
+                                        (click)="actionClick(data, action.callBack)">
+                                        <ng-template [ngTemplateOutlet]="action.iconTemplateRef"></ng-template>
+                                    </button>
+                                    <button *ngIf="action.type === 'multiple'" nz-button nzType="default" nz-dropdown
+                                        [nzDropdownMenu]="menu" style="height: 25px;width: 25px;">
+                                        <i nz-icon nzType="more" nzTheme="outline"></i>
+                                    </button>
+                                    <nz-dropdown-menu #menu="nzDropdownMenu">
+                                        <ul class="subAction" nz-menu
+                                            *ngFor="let subAction of action.subActions; trackBy: trackByIndex">
+                                            <li nz-menu-item>
+                                                <a href="javascript:void(0)"
+                                                    (click)="actionClick(data, subAction.callBack)">{{
+                                                    subAction.name }}</a>
+                                            </li>
+                                        </ul>
+                                    </nz-dropdown-menu>
+                                </ng-container>
+                            </div>
+                        </td>
+
+                        <ng-container *ngFor="let col of tableColumns; trackBy: trackByIndex">
+                            <td *ngIf="col.isShow !== false" [nzAlign]="col.align" style="cursor: pointer;">
+                                <ng-container *ngIf="!col.render; else renderTemplate">
+                                    <ng-container [ngSwitch]="col.dataType">
+                                        <ng-container *ngSwitchCase="dataType.number">
+                                            {{data[col.fieldDisplay] | formatNumber: (col.exponent ? col.exponent :
+                                            '2')}}
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="dataType.text">
+                                            {{data[col.fieldDisplay]}}
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="dataType.date">
+                                            {{data[col.fieldDisplay] | momentFormat : col.momentFormatOutput ??
+                                            'DD/MM/YYYY'
+                                            }}
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="dataType.datetime">
+                                            {{data[col.fieldDisplay] | momentFormat : col.momentFormatOutput ??
+                                            'DD/MM/YYYY
+                                            HH:mm:ss'}}
+                                        </ng-container>
+                                        <ng-container *ngSwitchCase="dataType.boolean">
+                                            <input type="checkbox" [checked]="data[col.fieldDisplay]" [readOnly]="true"
+                                                [disabled]="true">
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                                <ng-template #renderTemplate>
+                                    <div [innerHTML]="col.render(data) | sanitizeHtml"
+                                        (click)="col.callBack ? col.callBack(data) : ''">
+                                    </div>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                    </tr>
+                    <ng-template #editTemplate>
+                        <ng-content></ng-content>
+                    </ng-template>
+                </ng-container>
+                <tr>
+                    <td [attr.colspan]="tableColumns?.length + (isShowCheckedBox ? 2 : 1)">
+                        <button nz-button [nzSize]="'small'" type="button" nzType="link"
+                            class="color-primary kt-font-bold" (click)="addRow()">
+                            Thêm một dòng
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>

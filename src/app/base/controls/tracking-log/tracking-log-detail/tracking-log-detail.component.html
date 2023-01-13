@@ -1,0 +1,23 @@
+<span [ngSwitch]="dataType">
+    <ng-container *ngSwitchCase="dataTypeConst.string">
+        {{value}}
+    </ng-container>
+    <ng-container *ngSwitchCase="dataTypeConst.boolean">
+        {{value}}
+    </ng-container>
+    <ng-container *ngSwitchCase="dataTypeConst.date">
+        {{value | momentFormat:'DD/MM/YYYY HH:mm:ss'}}
+    </ng-container>
+    <ng-container *ngSwitchCase="dataTypeConst.int32">
+        {{toInteger(value) | formatNumber: '0'}}
+    </ng-container>
+    <ng-container *ngSwitchCase="dataTypeConst.double">
+        {{toDecimal(value) | formatNumber: '2'}}
+    </ng-container>
+    <ng-container *ngSwitchCase="dataTypeConst.decimal">
+        {{toDecimal(value) | formatNumber: '2'}}
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        {{value}}
+    </ng-container>
+</span>

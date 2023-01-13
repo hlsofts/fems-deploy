@@ -1,0 +1,23 @@
+<app-base-table-edit nz-table #baseNzTableEdit [tableColumns]="tableColumns" [moduleType]="moduleType"
+    [tableActions]="tableActions" [isShowCheckedBox]="false" [filterModel]="filterModel" [data]="data"
+    [isGetDataSourceFromServer]="true" [isShowPagination]="false" class="nz-table"
+    (onChange)="dataSourceOnChange($event)">
+    <tr role="form" class="form-validation"
+        *ngFor="let item of baseNzTableEdit.data; let index = index; trackBy: trackByIndex">
+        <td>
+            <button nz-button class="actionButton" [nzDanger]="true" [nzType]="'danger'" title="Xóa chi tiết"
+                (click)="removeRow(item)">
+                <i nz-icon nzType="delete" nzTheme="outline"></i>
+            </button>
+        </td>
+        <td>
+            <input type="text" nz-input [(ngModel)]="item.content" />
+        </td>
+        <td>
+            <input type="text" nz-input class="text-right" [(ngModel)]="item.amount" mask="separator.2"
+                thousandSeparator="," (ngModelChange)="changeAmount($event)" />
+        </td>
+    </tr>
+</app-base-table-edit>
+
+

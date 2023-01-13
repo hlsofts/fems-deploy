@@ -1,0 +1,27 @@
+<div class="card" *ngIf="!isViewForm; else form">
+    <nz-page-header class="site-page-header">
+        <nz-page-header-title>Danh mục ngân hàng</nz-page-header-title>
+
+        <nz-page-header-extra>
+            <button nz-button nzType="primary" (click)="add()">Thêm mới</button>
+        </nz-page-header-extra>
+
+        <nz-page-header-content>
+            <app-base-table-view #baseTableView [tableColumns]="tableColumns" [moduleType]="moduleType"
+                [tableActions]="tableActions" [filterModel]="filterModel">
+            </app-base-table-view>
+        </nz-page-header-content>
+    </nz-page-header>
+</div>
+
+<ng-template #form>
+    <app-bank-form [model]="model" [isReadOnly]="isReadOnly" (onBackToListEvent)="backToListEvent($event)"></app-bank-form>
+</ng-template>
+
+
+<ng-template #iconEditTemplateRef>
+    <i nz-icon nzType="edit" nzTheme="outline"></i>
+</ng-template>
+<ng-template #iconDeleteTemplateRef>
+    <i nz-icon nzType="delete" nzTheme="outline"></i>
+</ng-template>

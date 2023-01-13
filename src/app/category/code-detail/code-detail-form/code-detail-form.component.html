@@ -1,0 +1,78 @@
+<div class="card">
+    <nz-page-header class="site-page-header">
+        <nz-page-header-title>Danh mục khoản mục chi phí</nz-page-header-title>
+
+        <nz-page-header-extra>
+            <button nz-button nzType="primary" (click)="backToList()">Trở về</button>
+            <button *ngIf="!isReadOnly" nz-button nzType="primary" (click)="save()">Lưu</button>
+            <button *ngIf="isReadOnly" nz-button nzType="primary" (click)="edit()">Sửa</button>
+        </nz-page-header-extra>
+
+        <nz-page-header-content>
+            <div nz-row>
+                <div nz-col class="gutter-row content-panel" nzXXl="18" nzXl="18" nzLg="18" nzMd="18" [nzSpan]="24">
+                    <form nz-form [formGroup]="formGroup" (ngSubmit)="save()" nzLayout="horizontal">
+                        <nz-tabset>
+                            <nz-tab nzTitle="Thông tin chi phí">
+                                <div class="col-lg-12">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Loại chi phí</label>
+                                            <nz-form-item>
+                                                <nz-form-control [nzErrorTip]="typeErrorTpl">
+                                                    <app-code-detail-type-combobox formControlName="type"
+                                                        [selectedItems]="[{ value: formGroup.value?.type, displayText: formGroup.value?.typeName }]"
+                                                        (onItemSelected)="typeItemSelected($event)">
+                                                    </app-code-detail-type-combobox>
+                                                    <ng-template #typeErrorTpl let-control>
+                                                        <app-validation-messages [formCtrl]="control">
+                                                        </app-validation-messages>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Mã chi phí</label>
+                                            <nz-form-item>
+                                                <nz-form-control [nzErrorTip]="codeErrorTpl">
+                                                    <input type="text" nz-input class="hlsoft-input" autoFocus
+                                                        formControlName="code" [readOnly]="isReadOnly" />
+                                                    <ng-template #codeErrorTpl let-control>
+                                                        <app-validation-messages [formCtrl]="control">
+                                                        </app-validation-messages>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Tên chi phí</label>
+                                            <nz-form-item>
+                                                <nz-form-control [nzErrorTip]="nameErrorTpl">
+                                                    <input type="text" nz-input class="hlsoft-input" autoFocus
+                                                        formControlName="name" [readOnly]="isReadOnly" />
+                                                    <ng-template #nameErrorTpl let-control>
+                                                        <app-validation-messages [formCtrl]="control">
+                                                        </app-validation-messages>
+                                                    </ng-template>
+                                                </nz-form-control>
+                                            </nz-form-item>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nz-tab>
+                        </nz-tabset>
+
+                    </form>
+                </div>
+                <div nz-col class="gutter-row log-panel" nzXXl="6" nzXl="6" nzLg="6" nzMd="6" [nzSpan]="24">
+                    <nz-tabset>
+                        <nz-tab nzTitle="Lịch sử thay đổi">
+                            <app-tracking-log #trackingLogComponent [referenceId]="model.id" [moduleType]="moduleType">
+                            </app-tracking-log>
+                        </nz-tab>
+                    </nz-tabset>
+                </div>
+            </div>
+        </nz-page-header-content>
+    </nz-page-header>
+</div>
